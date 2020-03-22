@@ -1,0 +1,8 @@
+*.pyc
+*.swp
+venv/
+__pycache__
+.env
+.vscode
+terraform.tfstate*
+.terraform*
