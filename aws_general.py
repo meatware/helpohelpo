@@ -5,7 +5,7 @@ import logging
 import boto3
 import botocore.exceptions
 from botocore.client import ClientError
-import slack_housekeeping.helpers as helpo
+
 
 LOG = logging.getLogger(__name__)
 
