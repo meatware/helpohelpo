@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>dateframe_tools API documentation</title>
+<title>helpers.dateframe_tools API documentation</title>
 <meta name="description" content="Helpers to manipulate dataframes" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,7 +17,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>dateframe_tools</code></h1>
+<h1 class="title">Module <code>helpers.dateframe_tools</code></h1>
 </header>
 <section id="section-intro">
 <p>Helpers to manipulate dataframes</p>
@@ -31,7 +31,7 @@ import os
 from datetime import datetime
 import pandas as pd
 
-from date_tools import unixtime_to_datetime
+from helpers.date_tools import unixtime_to_datetime
 import os
 from datetime import datetime
 import pandas as pd
@@ -232,7 +232,7 @@ def slice_dataframe2(_df, start, finish):
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="dateframe_tools.check_ts_units"><code class="name flex">
+<dt id="helpers.dateframe_tools.check_ts_units"><code class="name flex">
 <span>def <span class="ident">check_ts_units</span></span>(<span>unix_ts)</span>
 </code></dt>
 <dd>
@@ -251,7 +251,7 @@ def slice_dataframe2(_df, start, finish):
     return unit</code></pre>
 </details>
 </dd>
-<dt id="dateframe_tools.date_from_string"><code class="name flex">
+<dt id="helpers.dateframe_tools.date_from_string"><code class="name flex">
 <span>def <span class="ident">date_from_string</span></span>(<span>mydate_str)</span>
 </code></dt>
 <dd>
@@ -265,7 +265,7 @@ def slice_dataframe2(_df, start, finish):
     return datetime.strptime(mydate_str, &#34;%Y-%m-%d&#34;).date()</code></pre>
 </details>
 </dd>
-<dt id="dateframe_tools.delfiles_not_in_list"><code class="name flex">
+<dt id="helpers.dateframe_tools.delfiles_not_in_list"><code class="name flex">
 <span>def <span class="ident">delfiles_not_in_list</span></span>(<span>folder, exclude_list)</span>
 </code></dt>
 <dd>
@@ -297,7 +297,7 @@ def slice_dataframe2(_df, start, finish):
     return</code></pre>
 </details>
 </dd>
-<dt id="dateframe_tools.drop_cols"><code class="name flex">
+<dt id="helpers.dateframe_tools.drop_cols"><code class="name flex">
 <span>def <span class="ident">drop_cols</span></span>(<span>_df, drop_list)</span>
 </code></dt>
 <dd>
@@ -317,7 +317,7 @@ def slice_dataframe2(_df, start, finish):
     return _df</code></pre>
 </details>
 </dd>
-<dt id="dateframe_tools.get_segment_1st_ts"><code class="name flex">
+<dt id="helpers.dateframe_tools.get_segment_1st_ts"><code class="name flex">
 <span>def <span class="ident">get_segment_1st_ts</span></span>(<span>unix_ts)</span>
 </code></dt>
 <dd>
@@ -339,7 +339,7 @@ def slice_dataframe2(_df, start, finish):
     return first_timestamp</code></pre>
 </details>
 </dd>
-<dt id="dateframe_tools.read_data_sim"><code class="name flex">
+<dt id="helpers.dateframe_tools.read_data_sim"><code class="name flex">
 <span>def <span class="ident">read_data_sim</span></span>(<span>infile)</span>
 </code></dt>
 <dd>
@@ -356,7 +356,7 @@ def slice_dataframe2(_df, start, finish):
     return sim_ts_data</code></pre>
 </details>
 </dd>
-<dt id="dateframe_tools.rm_col_names"><code class="name flex">
+<dt id="helpers.dateframe_tools.rm_col_names"><code class="name flex">
 <span>def <span class="ident">rm_col_names</span></span>(<span>_df, exclude_list)</span>
 </code></dt>
 <dd>
@@ -378,7 +378,7 @@ def slice_dataframe2(_df, start, finish):
     return col_names</code></pre>
 </details>
 </dd>
-<dt id="dateframe_tools.set_time_as_index"><code class="name flex">
+<dt id="helpers.dateframe_tools.set_time_as_index"><code class="name flex">
 <span>def <span class="ident">set_time_as_index</span></span>(<span>_df)</span>
 </code></dt>
 <dd>
@@ -395,7 +395,7 @@ def slice_dataframe2(_df, start, finish):
     return _df</code></pre>
 </details>
 </dd>
-<dt id="dateframe_tools.slice_dataframe"><code class="name flex">
+<dt id="helpers.dateframe_tools.slice_dataframe"><code class="name flex">
 <span>def <span class="ident">slice_dataframe</span></span>(<span>_df, start, finish)</span>
 </code></dt>
 <dd>
@@ -413,7 +413,7 @@ def slice_dataframe2(_df, start, finish):
     return (sliced, slice_timestamp)</code></pre>
 </details>
 </dd>
-<dt id="dateframe_tools.slice_dataframe2"><code class="name flex">
+<dt id="helpers.dateframe_tools.slice_dataframe2"><code class="name flex">
 <span>def <span class="ident">slice_dataframe2</span></span>(<span>_df, start, finish)</span>
 </code></dt>
 <dd>
@@ -430,7 +430,7 @@ def slice_dataframe2(_df, start, finish):
     return sliced</code></pre>
 </details>
 </dd>
-<dt id="dateframe_tools.string_to_datetime"><code class="name flex">
+<dt id="helpers.dateframe_tools.string_to_datetime"><code class="name flex">
 <span>def <span class="ident">string_to_datetime</span></span>(<span>date)</span>
 </code></dt>
 <dd>
@@ -445,7 +445,7 @@ def slice_dataframe2(_df, start, finish):
     return datetime.strptime(date, &#34;%Y-%m-%dT%H:%M:%S.%fZ&#34;)</code></pre>
 </details>
 </dd>
-<dt id="dateframe_tools.time_from_string"><code class="name flex">
+<dt id="helpers.dateframe_tools.time_from_string"><code class="name flex">
 <span>def <span class="ident">time_from_string</span></span>(<span>mytime_str, tformat='%H:%M')</span>
 </code></dt>
 <dd>
@@ -459,7 +459,7 @@ def slice_dataframe2(_df, start, finish):
     return datetime.strptime(mytime_str, tformat).time()</code></pre>
 </details>
 </dd>
-<dt id="dateframe_tools.unixtime_to_datestring"><code class="name flex">
+<dt id="helpers.dateframe_tools.unixtime_to_datestring"><code class="name flex">
 <span>def <span class="ident">unixtime_to_datestring</span></span>(<span>unix_time)</span>
 </code></dt>
 <dd>
@@ -485,21 +485,26 @@ def slice_dataframe2(_df, start, finish):
 <ul></ul>
 </div>
 <ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="helpers" href="index.html">helpers</a></code></li>
+</ul>
+</li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="dateframe_tools.check_ts_units" href="#dateframe_tools.check_ts_units">check_ts_units</a></code></li>
-<li><code><a title="dateframe_tools.date_from_string" href="#dateframe_tools.date_from_string">date_from_string</a></code></li>
-<li><code><a title="dateframe_tools.delfiles_not_in_list" href="#dateframe_tools.delfiles_not_in_list">delfiles_not_in_list</a></code></li>
-<li><code><a title="dateframe_tools.drop_cols" href="#dateframe_tools.drop_cols">drop_cols</a></code></li>
-<li><code><a title="dateframe_tools.get_segment_1st_ts" href="#dateframe_tools.get_segment_1st_ts">get_segment_1st_ts</a></code></li>
-<li><code><a title="dateframe_tools.read_data_sim" href="#dateframe_tools.read_data_sim">read_data_sim</a></code></li>
-<li><code><a title="dateframe_tools.rm_col_names" href="#dateframe_tools.rm_col_names">rm_col_names</a></code></li>
-<li><code><a title="dateframe_tools.set_time_as_index" href="#dateframe_tools.set_time_as_index">set_time_as_index</a></code></li>
-<li><code><a title="dateframe_tools.slice_dataframe" href="#dateframe_tools.slice_dataframe">slice_dataframe</a></code></li>
-<li><code><a title="dateframe_tools.slice_dataframe2" href="#dateframe_tools.slice_dataframe2">slice_dataframe2</a></code></li>
-<li><code><a title="dateframe_tools.string_to_datetime" href="#dateframe_tools.string_to_datetime">string_to_datetime</a></code></li>
-<li><code><a title="dateframe_tools.time_from_string" href="#dateframe_tools.time_from_string">time_from_string</a></code></li>
-<li><code><a title="dateframe_tools.unixtime_to_datestring" href="#dateframe_tools.unixtime_to_datestring">unixtime_to_datestring</a></code></li>
+<li><code><a title="helpers.dateframe_tools.check_ts_units" href="#helpers.dateframe_tools.check_ts_units">check_ts_units</a></code></li>
+<li><code><a title="helpers.dateframe_tools.date_from_string" href="#helpers.dateframe_tools.date_from_string">date_from_string</a></code></li>
+<li><code><a title="helpers.dateframe_tools.delfiles_not_in_list" href="#helpers.dateframe_tools.delfiles_not_in_list">delfiles_not_in_list</a></code></li>
+<li><code><a title="helpers.dateframe_tools.drop_cols" href="#helpers.dateframe_tools.drop_cols">drop_cols</a></code></li>
+<li><code><a title="helpers.dateframe_tools.get_segment_1st_ts" href="#helpers.dateframe_tools.get_segment_1st_ts">get_segment_1st_ts</a></code></li>
+<li><code><a title="helpers.dateframe_tools.read_data_sim" href="#helpers.dateframe_tools.read_data_sim">read_data_sim</a></code></li>
+<li><code><a title="helpers.dateframe_tools.rm_col_names" href="#helpers.dateframe_tools.rm_col_names">rm_col_names</a></code></li>
+<li><code><a title="helpers.dateframe_tools.set_time_as_index" href="#helpers.dateframe_tools.set_time_as_index">set_time_as_index</a></code></li>
+<li><code><a title="helpers.dateframe_tools.slice_dataframe" href="#helpers.dateframe_tools.slice_dataframe">slice_dataframe</a></code></li>
+<li><code><a title="helpers.dateframe_tools.slice_dataframe2" href="#helpers.dateframe_tools.slice_dataframe2">slice_dataframe2</a></code></li>
+<li><code><a title="helpers.dateframe_tools.string_to_datetime" href="#helpers.dateframe_tools.string_to_datetime">string_to_datetime</a></code></li>
+<li><code><a title="helpers.dateframe_tools.time_from_string" href="#helpers.dateframe_tools.time_from_string">time_from_string</a></code></li>
+<li><code><a title="helpers.dateframe_tools.unixtime_to_datestring" href="#helpers.dateframe_tools.unixtime_to_datestring">unixtime_to_datestring</a></code></li>
 </ul>
 </li>
 </ul>
