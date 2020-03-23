@@ -65,7 +65,7 @@
     transition: color .3s ease-in-out;
   }
   a:hover {
-    color: green;
+    color: #e82;
   }
 
   .title code {
