@@ -1,3 +1,10 @@
+.wm-top-title {
+  display: inline-block;
+  line-height: 16px;
+  vertical-align: middle;
+  color: #2fadff;
+}
+
 h1 {
   color: #79c800;
 }
@@ -15,7 +22,7 @@ h4 {
 }  
 
 h5 {
-  color: #2fadff;
+  color: #ff2fad;
 }  
 
 h6 {
@@ -70,10 +77,32 @@ body {
   background-color: #79c800;
 }
 
-.wm-toctree a, .wm-toctree a:visited, .wm-toctree a:hover, .wm-toctree a:focus {
+.wm-page-toc-text {
+  padding: 2px 2px 2px 1rem;
+  display: block;
+  cursor: pointer;
+  color: red;
+  background-color: #282c34;
+}
+
+.wm-toctree a, .wm-toctree a:visited {
     color: #79c800;
+    text-emphasis-color: black;
     text-decoration: none;
     outline: none;
+}
+
+
+.wm-toctree .wm-toctree a:hover {
+  color: #ff2fad;
+  text-decoration: none;
+  outline-width: none;
+}
+
+.wm-toctree .wm-toctree a:focus {
+  color: #ff2fad;
+  text-decoration: none;
+  outline-width: none;
 }
 
 span.wm-toc-text {
@@ -81,7 +110,8 @@ span.wm-toc-text {
 }
 
 .wm-toc-li.wm-current, .wm-toc-li.wm-current:hover {
-  background-color: #79c800;
+  background-color: #2fadff;
+  text-shadow: 2px 2px 2px black;
   color: #21252B;
 }
 
@@ -139,7 +169,7 @@ code {
 
 /* More class support */
 .admonition.danger, .admonition.error, .admonition.important { /* csslint allow: adjoining-classes */
-  color: purple;
+  color: red;
   background-color: #f2dede;
   border-color: #eed3d7;
 }
@@ -167,37 +197,34 @@ a, a:visited, a:hover, a:focus {
   color: #2fadff;
 }
 
-/* li::before {content: counter(li); color: #2fadff;
-  display: inline-block; width: 1em;
-  margin-left: -1em}
-//One more thing is missing: As it is our own counter, we're responsible for augmenting it as well:
-
-li {counter-increment: li} */
-
-li {
-  color: mintcream; 
-  /* set color of list item text */
-  display: inline-block;
-  list-style: none; 
-  margin: 0 0 16px 1.1225em;
-  /* Give the bullet room on the left hand side */
-  padding: 0;
+/* list stuff */
+/* Tell the list-items to not display numbers, but keep track of what the numbers should be */
+ol li {
+  counter-increment: list;
+  list-style-type: none;
   position: relative;
 }
 
-li::before {
-  color: #2fadff;  
-  /* color of bullet or square */
-  content: counter(li); 
-  /* Unicode of character to precede the list item */
-  display: inline-block;
-  font-size: 1em; 
-  /* use em or % */ 
-  left: -1.1225em; 
-  /* use em, line up bullet flush with left hand side */
+/* Output the numbers using the counter() function, but use a custom color, and position the numbers how we want */ol li:before {
+  color: #2fadff;
+  content: counter(list) ".";
+  left: -32px;
   position: absolute;
-  /* Set the bullet positioned absolutely top left */
-  top: 0em; 
-  /* use em or % */
+  text-align: right;
+  width: 26px;
 }
-li {counter-increment: li}
+
+/* tables */
+th { 
+  color: #00c8b3;
+  font-weight: bolder;
+  font-size: large;
+  text-align: center; 
+  vertical-align: middle;  
+}
+
+td { color: mintcream;
+  text-align: center; 
+  vertical-align: middle;
+}
+td:nth-child(1) { color: #00c8b3; }
