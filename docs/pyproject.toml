@@ -18,9 +18,7 @@ include_reference_documentation = true
 [tool.portray.mkdocs.theme]
 name = "windmill-dark"
 favicon = "img/favicon.ico"
-
-
-extra_css = ["docs/css/extra.css"]
+extra_css = ["css/extra.css"]
 
 
 [[tool.portray.mkdocs.nav]]
