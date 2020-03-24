@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # pdoc --html --force helpers --template-dir docs/custom_pdoc_templates/
 

@@ -17,10 +17,10 @@ include_reference_documentation = true
 
 [tool.portray.mkdocs.theme]
 name = "windmill-dark"
-favicon = "art/logo_small.png"
-logo = "art/logo_small.png"
-palette = {primary = "red", accent = "green"}
-extra_css = "docs/css/extra.css"
+favicon = "img/favicon.ico"
+
+
+extra_css = ["docs/css/extra.css"]
 
 
 [[tool.portray.mkdocs.nav]]
