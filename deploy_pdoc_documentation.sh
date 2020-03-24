@@ -14,7 +14,8 @@
 
 
 portray as_html  --output_dir psite_temp --overwrite True 
-cp -rf psite_temp/* docs
+cp -rf psite_temp/* docs/
+cp -v  custom_css2/extra.css docs/css/extra.css
 
 cd docs/
 rm *.sh *.txt 

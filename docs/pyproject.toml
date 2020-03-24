@@ -20,7 +20,7 @@ name = "windmill-dark"
 favicon = "art/logo_small.png"
 logo = "art/logo_small.png"
 palette = {primary = "red", accent = "green"}
-extra_css = "docs/custom_css/extra.css"
+extra_css = "docs/css/extra.css"
 
 
 [[tool.portray.mkdocs.nav]]
