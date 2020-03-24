@@ -21,8 +21,7 @@ extra_css = ["css/extra.css"]
 [tool.portray.mkdocs.theme]
 name = "windmill-dark"
 favicon = "img/favicon.ico"
-highlightjs =  true
-hljs_languages = ["python"]
+
 
 
 
