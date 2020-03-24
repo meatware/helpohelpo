@@ -15,10 +15,12 @@ docs_dir = "markdown"
 output_dir = "docs"
 include_reference_documentation = true
 
+[tool.portray.mkdocs]
+extra_css = ["css/extra.css"]
+
 [tool.portray.mkdocs.theme]
 name = "windmill-dark"
 favicon = "img/favicon.ico"
-extra_css = ["css/extra.css"]
 
 
 [[tool.portray.mkdocs.nav]]
