@@ -1,0 +1,28 @@
+[tool.portray]
+name = "helpers"
+version = "0.1"
+description = "A library of python helpers"
+authors = "meatware happy@zoho.com"
+homepage = "https://github.com/meatware/helpohelpo"
+modules = ["helpers"]
+license = "MIT"
+packages = [
+    { include = "helpers/*.py" }
+]
+
+# https://timothycrosley.github.io/portray/reference/portray/render/
+docs_dir = "markdown"
+output_dir = "docs"
+include_reference_documentation = true
+
+[tool.portray.mkdocs.theme]
+name = "windmill-dark"
+favicon = "art/logo_small.png"
+logo = "art/logo_small.png"
+palette = {primary = "red", accent = "green"}
+extra_css = "docs/custom_css/extra.css"
+
+
+[[tool.portray.mkdocs.nav]]
+Home = "README.md"
+

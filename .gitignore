@@ -6,3 +6,9 @@ __pycache__
 .vscode
 terraform.tfstate*
 .terraform*
+.cache
+.vscode
+.pytest_cache
+__pycache__
+.coverage
+helpo.txt
