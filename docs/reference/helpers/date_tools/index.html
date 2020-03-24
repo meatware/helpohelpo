@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Date Tools - helpohelpo</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Module helpers.date_tools", url: "#_top", children: [
+              {title: "Variables", url: "#variables" },
+              {title: "Functions", url: "#functions" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script>
+      <script src="../../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../dateframe_tools/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../dateframe_tools/" class="btn btn-xs btn-link">
+        Dateframe Tools
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../data_structure_search/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../data_structure_search/" class="btn btn-xs btn-link">
+        Data Structure Search
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="module-helpersdate_tools">Module helpers.date_tools</h1>
+<p>Helpers to manipulate times</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Helpers to manipulate times&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">import</span> <span class="nn">arrow</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">dateutil</span> <span class="kn">import</span> <span class="n">tz</span>
+
+<span class="kn">from</span> <span class="nn">pydash</span> <span class="kn">import</span> <span class="n">get</span>
+
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">get_unix_ts_unit</span><span class="p">(</span><span class="n">unix_ts</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Check if linux timestamp units are in seconds or ms.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">unix_ts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>
+
+        <span class="n">unit</span> <span class="o">=</span> <span class="s2">&quot;ms&quot;</span>
+
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">unix_ts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">10</span><span class="p">:</span>
+
+        <span class="n">unit</span> <span class="o">=</span> <span class="s2">&quot;s&quot;</span>
+
+    <span class="k">return</span> <span class="n">unit</span>
+
+<span class="k">def</span> <span class="nf">convert_unix_time</span><span class="p">(</span><span class="n">unix_time</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Convert unix timestamp to date-time object.&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">unix_time</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">tz</span><span class="o">=</span><span class="n">tz</span><span class="o">.</span><span class="n">tzutc</span><span class="p">())</span>
+
+<span class="k">def</span> <span class="nf">format_dt_object</span><span class="p">(</span><span class="n">dt_obj</span><span class="p">,</span> <span class="n">fmt_str</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;return date time object in format specified.&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">dt_obj</span><span class="p">,</span> <span class="n">fmt_str</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">check_date_fmt</span><span class="p">(</span><span class="n">date_string</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Check that date matches format &quot;YYYY-MM-DD&quot;.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">REGEX_PATTERN</span><span class="p">,</span> <span class="n">date_string</span><span class="p">):</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;date string verified&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Whoops! Incorrect date format&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="bp">False</span>
+
+<span class="k">def</span> <span class="nf">string_to_datetime</span><span class="p">(</span><span class="n">date_str</span><span class="p">,</span> <span class="n">time_format</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Convert pre-checked string into datetime object.&quot;&quot;&quot;</span>
+
+    <span class="n">datet_obj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">date_str</span><span class="p">,</span> <span class="n">time_format</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">datet_obj</span>
+
+<span class="k">def</span> <span class="nf">calc_ndays_fwd</span><span class="p">(</span><span class="n">ndays</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Returns a date string n days from today for use in</span>
+
+<span class="sd">    an AWS schedule_deletion tag.&quot;&quot;&quot;</span>
+
+    <span class="n">utc_time_now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+
+    <span class="n">ndays_fwd</span> <span class="o">=</span> <span class="n">utc_time_now</span><span class="o">.</span><span class="n">date</span><span class="p">()</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">ndays</span><span class="p">)</span>
+
+    <span class="n">ndays_fwd_str</span> <span class="o">=</span> <span class="n">format_dt_object</span><span class="p">(</span><span class="n">ndays_fwd</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ndays_fwd_str</span>
+
+<span class="k">def</span> <span class="nf">calc_ndays_back_from_today</span><span class="p">(</span><span class="n">days_back</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Calculates the difference bewteen today and ndays back.&quot;&quot;&quot;</span>
+
+    <span class="n">utc_time_now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">tz</span><span class="o">.</span><span class="n">tzutc</span><span class="p">())</span>
+
+    <span class="n">ndays_back</span> <span class="o">=</span> <span class="n">utc_time_now</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">days_back</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ndays_back</span>
+
+<span class="k">def</span> <span class="nf">calc_days_from_2dates_diff</span><span class="p">(</span><span class="n">prev_date</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Calculates the difference bewteen today and a previous date in days.&quot;&quot;&quot;</span>
+
+    <span class="n">utc_time_now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">tz</span><span class="o">.</span><span class="n">tzutc</span><span class="p">())</span>
+
+    <span class="c1"># ndays_back = utc_time_now - timedelta(days=prev_date)</span>
+
+    <span class="n">ndays_back</span> <span class="o">=</span> <span class="n">utc_time_now</span> <span class="o">-</span> <span class="n">prev_date</span>
+
+    <span class="k">return</span> <span class="n">ndays_back</span><span class="o">.</span><span class="n">days</span>
+
+<span class="k">def</span> <span class="nf">datetimeformat</span><span class="p">(</span><span class="n">date_str</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Print relative time from date_str.&quot;&quot;&quot;</span>
+
+    <span class="n">mydate_time</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">date_str</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mydate_time</span><span class="o">.</span><span class="n">humanize</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">unixtime_to_datestring</span><span class="p">(</span><span class="n">unix_time</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Convert unix timestamp into a string.&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">unix_time</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">unixtime_to_datetime</span><span class="p">(</span><span class="n">unix_time</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Convert unix timestamp into a string.&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">unix_time</span><span class="p">)</span>
+
+<span class="c1"># TODO: unify redundant time functions</span>
+
+<span class="k">def</span> <span class="nf">time_from_string</span><span class="p">(</span><span class="n">mytime_str</span><span class="p">,</span> <span class="n">tformat</span><span class="o">=</span><span class="s2">&quot;%H:%M&quot;</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Converts a string into a time object.&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">mytime_str</span><span class="p">,</span> <span class="n">tformat</span><span class="p">)</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">date_from_string</span><span class="p">(</span><span class="n">mydate_str</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Converts a string into a date object.&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">mydate_str</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+
+<span class="c1"># TODO: Move to another module</span>
+
+<span class="k">def</span> <span class="nf">find_nested_key</span><span class="p">(</span><span class="n">aws_response</span><span class="p">,</span> <span class="n">key_path</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Check if nested mixed dictionary/list object has dict key. Uses pydash get&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">get</span><span class="p">(</span><span class="n">aws_response</span><span class="p">,</span> <span class="n">key_path</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+<h2 id="variables">Variables</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">LOG</span>
+</code></pre></div>
+
+
+<h2 id="functions">Functions</h2>
+<h3 id="calc_days_from_2dates_diff">calc_days_from_2dates_diff</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">calc_days_from_2dates_diff</span><span class="p">(</span>
+    <span class="n">prev_date</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Calculates the difference bewteen today and a previous date in days.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">calc_days_from_2dates_diff</span><span class="p">(</span><span class="n">prev_date</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Calculates the difference bewteen today and a previous date in days.&quot;&quot;&quot;</span>
+
+    <span class="n">utc_time_now</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="n">utcnow</span><span class="p">().</span><span class="k">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">tz</span><span class="p">.</span><span class="n">tzutc</span><span class="p">())</span>
+
+    <span class="o">#</span> <span class="n">ndays_back</span> <span class="o">=</span> <span class="n">utc_time_now</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">prev_date</span><span class="p">)</span>
+
+    <span class="n">ndays_back</span> <span class="o">=</span> <span class="n">utc_time_now</span> <span class="o">-</span> <span class="n">prev_date</span>
+
+    <span class="k">return</span> <span class="n">ndays_back</span><span class="p">.</span><span class="n">days</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="calc_ndays_back_from_today">calc_ndays_back_from_today</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">calc_ndays_back_from_today</span><span class="p">(</span>
+    <span class="n">days_back</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Calculates the difference bewteen today and ndays back.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">calc_ndays_back_from_today</span><span class="p">(</span><span class="n">days_back</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Calculates the difference bewteen today and ndays back.&quot;&quot;&quot;</span>
+
+    <span class="n">utc_time_now</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="n">utcnow</span><span class="p">().</span><span class="k">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">tz</span><span class="p">.</span><span class="n">tzutc</span><span class="p">())</span>
+
+    <span class="n">ndays_back</span> <span class="o">=</span> <span class="n">utc_time_now</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">days_back</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ndays_back</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="calc_ndays_fwd">calc_ndays_fwd</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">calc_ndays_fwd</span><span class="p">(</span>
+    <span class="n">ndays</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Returns a date string n days from today for use in
+an AWS schedule_deletion tag.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">calc_ndays_fwd</span><span class="p">(</span><span class="n">ndays</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Returns a date string n days from today for use in</span>
+
+<span class="ss">    an AWS schedule_deletion tag.&quot;&quot;&quot;</span>
+
+    <span class="n">utc_time_now</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="n">utcnow</span><span class="p">()</span>
+
+    <span class="n">ndays_fwd</span> <span class="o">=</span> <span class="n">utc_time_now</span><span class="p">.</span><span class="nb">date</span><span class="p">()</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">ndays</span><span class="p">)</span>
+
+    <span class="n">ndays_fwd_str</span> <span class="o">=</span> <span class="n">format_dt_object</span><span class="p">(</span><span class="n">ndays_fwd</span><span class="p">,</span> <span class="ss">&quot;%Y-%m-%d&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ndays_fwd_str</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="check_date_fmt">check_date_fmt</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">check_date_fmt</span><span class="p">(</span>
+    <span class="n">date_string</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Check that date matches format "YYYY-MM-DD".</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">check_date_fmt</span><span class="p">(</span><span class="n">date_string</span><span class="o">=</span><span class="k">None</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Check that date matches format &quot;</span><span class="n">YYYY</span><span class="o">-</span><span class="n">MM</span><span class="o">-</span><span class="n">DD</span><span class="ss">&quot;.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">re</span><span class="p">.</span><span class="k">match</span><span class="p">(</span><span class="n">REGEX_PATTERN</span><span class="p">,</span> <span class="n">date_string</span><span class="p">):</span>
+
+        <span class="n">LOG</span><span class="p">.</span><span class="n">debug</span><span class="p">(</span><span class="ss">&quot;date string verified&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="k">True</span>
+
+    <span class="n">LOG</span><span class="p">.</span><span class="n">debug</span><span class="p">(</span><span class="ss">&quot;Whoops! Incorrect date format&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="k">False</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="convert_unix_time">convert_unix_time</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">convert_unix_time</span><span class="p">(</span>
+    <span class="n">unix_time</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Convert unix timestamp to date-time object.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">convert_unix_time</span><span class="p">(</span><span class="n">unix_time</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Convert unix timestamp to date-time object.&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">datetime</span><span class="p">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">unix_time</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">tz</span><span class="o">=</span><span class="n">tz</span><span class="p">.</span><span class="n">tzutc</span><span class="p">())</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="date_from_string">date_from_string</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">date_from_string</span><span class="p">(</span>
+    <span class="n">mydate_str</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Converts a string into a date object.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">date_from_string</span><span class="p">(</span><span class="n">mydate_str</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Converts a string into a date object.&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">datetime</span><span class="p">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">mydate_str</span><span class="p">,</span> <span class="ss">&quot;%Y-%m-%d&quot;</span><span class="p">).</span><span class="nb">date</span><span class="p">()</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="datetimeformat">datetimeformat</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">datetimeformat</span><span class="p">(</span>
+    <span class="n">date_str</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Print relative time from date_str.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">datetimeformat</span><span class="p">(</span><span class="n">date_str</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Print relative time from date_str.&quot;&quot;&quot;</span>
+
+    <span class="n">mydate_time</span> <span class="o">=</span> <span class="n">arrow</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="n">date_str</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mydate_time</span><span class="p">.</span><span class="n">humanize</span><span class="p">()</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="find_nested_key">find_nested_key</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">find_nested_key</span><span class="p">(</span>
+    <span class="n">aws_response</span><span class="p">,</span>
+    <span class="n">key_path</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Check if nested mixed dictionary/list object has dict key. Uses pydash get</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">find_nested_key</span><span class="p">(</span><span class="n">aws_response</span><span class="p">,</span> <span class="n">key_path</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Check if nested mixed dictionary/list object has dict key. Uses pydash get&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="k">get</span><span class="p">(</span><span class="n">aws_response</span><span class="p">,</span> <span class="n">key_path</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="format_dt_object">format_dt_object</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">format_dt_object</span><span class="p">(</span>
+    <span class="n">dt_obj</span><span class="p">,</span>
+    <span class="n">fmt_str</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>return date time object in format specified.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">format_dt_object</span><span class="p">(</span><span class="n">dt_obj</span><span class="p">,</span> <span class="n">fmt_str</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;return date time object in format specified.&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">datetime</span><span class="p">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">dt_obj</span><span class="p">,</span> <span class="n">fmt_str</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="get_unix_ts_unit">get_unix_ts_unit</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">get_unix_ts_unit</span><span class="p">(</span>
+    <span class="n">unix_ts</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Check if linux timestamp units are in seconds or ms.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">get_unix_ts_unit</span><span class="p">(</span><span class="n">unix_ts</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Check if linux timestamp units are in seconds or ms.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">len</span><span class="p">(</span><span class="n">unix_ts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>
+
+        <span class="n">unit</span> <span class="o">=</span> <span class="ss">&quot;ms&quot;</span>
+
+    <span class="n">elif</span> <span class="n">len</span><span class="p">(</span><span class="n">unix_ts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">10</span><span class="p">:</span>
+
+        <span class="n">unit</span> <span class="o">=</span> <span class="ss">&quot;s&quot;</span>
+
+    <span class="k">return</span> <span class="n">unit</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="string_to_datetime">string_to_datetime</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">string_to_datetime</span><span class="p">(</span>
+    <span class="n">date_str</span><span class="p">,</span>
+    <span class="n">time_format</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Convert pre-checked string into datetime object.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">string_to_datetime</span><span class="p">(</span><span class="n">date_str</span><span class="p">,</span> <span class="n">time_format</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Convert pre-checked string into datetime object.&quot;&quot;&quot;</span>
+
+    <span class="n">datet_obj</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">date_str</span><span class="p">,</span> <span class="n">time_format</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">datet_obj</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="time_from_string">time_from_string</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">time_from_string</span><span class="p">(</span>
+    <span class="n">mytime_str</span><span class="p">,</span>
+    <span class="n">tformat</span><span class="o">=</span><span class="s1">&#39;%H:%M&#39;</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Converts a string into a time object.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">time_from_string</span><span class="p">(</span><span class="n">mytime_str</span><span class="p">,</span> <span class="n">tformat</span><span class="o">=</span><span class="ss">&quot;%H:%M&quot;</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Converts a string into a time object.&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">datetime</span><span class="p">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">mytime_str</span><span class="p">,</span> <span class="n">tformat</span><span class="p">).</span><span class="k">time</span><span class="p">()</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="unixtime_to_datestring">unixtime_to_datestring</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">unixtime_to_datestring</span><span class="p">(</span>
+    <span class="n">unix_time</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Convert unix timestamp into a string.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">unixtime_to_datestring</span><span class="p">(</span><span class="n">unix_time</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Convert unix timestamp into a string.&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">datetime</span><span class="p">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">unix_time</span><span class="p">).</span><span class="n">strftime</span><span class="p">(</span><span class="ss">&quot;%Y-%m-%d %H:%M:%S&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="unixtime_to_datetime">unixtime_to_datetime</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">unixtime_to_datetime</span><span class="p">(</span>
+    <span class="n">unix_time</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Convert unix timestamp into a string.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">unixtime_to_datetime</span><span class="p">(</span><span class="n">unix_time</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Convert unix timestamp into a string.&quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">datetime</span><span class="p">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">unix_time</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../dateframe_tools/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../dateframe_tools/" class="btn btn-xs btn-link">
+        Dateframe Tools
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../data_structure_search/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../data_structure_search/" class="btn btn-xs btn-link">
+        Data Structure Search
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+      <p>
+        <a href="https://home-meatware/meatware/helpohelpo.git">helpohelpo</a>
+      </p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="https://home-meatware/meatware/helpohelpo.git">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

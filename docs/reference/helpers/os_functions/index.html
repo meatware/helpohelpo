@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Os Functions - helpohelpo</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Module helpers.os_functions", url: "#_top", children: [
+              {title: "Variables", url: "#variables" },
+              {title: "Functions", url: "#functions" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script>
+      <script src="../../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../plotter_tools/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../plotter_tools/" class="btn btn-xs btn-link">
+        Plotter Tools
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../" class="btn btn-xs btn-link">
+        Index
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="module-helpersos_functions">Module helpers.os_functions</h1>
+<p>Python helpers module.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Python helpers module.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">delete_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Deletes a file from disk.&quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Log file </span><span class="si">%s</span><span class="s2"> deleted from local drive&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Log file </span><span class="si">%s</span><span class="s2"> does not exist </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">rm_dir_if_exists</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Remove file directory if it exists.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">rm_fil_if_exists</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+
+    <span class="c1">#  so we should check if file exists or not not before deleting them</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Delete file attempt failed for </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">copy_clobber</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Copy directory. Overwrite target folder if it exists.&quot;&quot;&quot;</span>
+
+    <span class="n">rm_dir_if_exists</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+    <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+
+    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Copied: </span><span class="si">%s</span><span class="s2"> --&gt; </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">select_os_things</span><span class="p">(</span><span class="n">my_wd</span><span class="o">=</span><span class="s2">&quot;./&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="n">suf_pre</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">exclude_list</span><span class="o">=</span><span class="p">[]):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Create a filtered list of os type items.</span>
+
+<span class="sd">    Mode can be folder, file, suffix, prefix.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;folder&quot;</span><span class="p">:</span>
+
+        <span class="n">os_thing_list</span> <span class="o">=</span> <span class="p">[</span>
+
+            <span class="n">thing</span>
+
+            <span class="k">for</span> <span class="n">thing</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">my_wd</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">thing</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">thing</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude_list</span>
+
+        <span class="p">]</span>
+
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;file&quot;</span><span class="p">:</span>
+
+        <span class="n">os_thing_list</span> <span class="o">=</span> <span class="p">[</span>
+
+            <span class="n">thing</span>
+
+            <span class="k">for</span> <span class="n">thing</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">my_wd</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">thing</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">thing</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude_list</span>
+
+        <span class="p">]</span>
+
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;suffix&quot;</span><span class="p">:</span>
+
+        <span class="n">os_thing_list</span> <span class="o">=</span> <span class="p">[</span>
+
+            <span class="n">thing</span>
+
+            <span class="k">for</span> <span class="n">thing</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">my_wd</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">thing</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">suf_pre</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">thing</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude_list</span>
+
+        <span class="p">]</span>
+
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;prefix&quot;</span><span class="p">:</span>
+
+        <span class="n">os_thing_list</span> <span class="o">=</span> <span class="p">[</span>
+
+            <span class="n">thing</span>
+
+            <span class="k">for</span> <span class="n">thing</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">my_wd</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">thing</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">suf_pre</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">thing</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude_list</span>
+
+        <span class="p">]</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;Incorrect mode: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">os_thing_list</span>
+
+<span class="k">def</span> <span class="nf">count_str_whitespace</span><span class="p">(</span><span class="n">mystr</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Counts no of whitespace in string and returns an int.&quot;&quot;&quot;</span>
+
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">mychar</span> <span class="ow">in</span> <span class="n">mystr</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">mychar</span><span class="o">.</span><span class="n">isspace</span><span class="p">():</span>
+
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">count</span>
+
+<span class="k">def</span> <span class="nf">unify_dic_key</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+
+    <span class="n">unifiedkey</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">unifiedkey</span>
+
+<span class="k">def</span> <span class="nf">delfiles_not_in_list</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">exclude_list</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Delete all files in folder aprt from those in exclude list.&quot;&quot;&quot;</span>
+
+    <span class="c1">### prepare delete list</span>
+
+    <span class="n">del_files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+
+    <span class="c1"># TODO: this is repeated in rm_col_names (generalise)</span>
+
+    <span class="k">for</span> <span class="n">excl_str</span> <span class="ow">in</span> <span class="n">exclude_list</span><span class="p">:</span>
+
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="n">del_files</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">excl_str</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+
+            <span class="k">pass</span>
+
+    <span class="c1">### delete files</span>
+
+    <span class="k">for</span> <span class="n">rmfile</span> <span class="ow">in</span> <span class="n">del_files</span><span class="p">:</span>
+
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">rmfile</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+
+                <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+
+            <span class="k">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+
+    <span class="k">return</span>
+</code></pre></div>
+
+
+</details>
+<h2 id="variables">Variables</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">LOG</span>
+</code></pre></div>
+
+
+<h2 id="functions">Functions</h2>
+<h3 id="copy_clobber">copy_clobber</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">copy_clobber</span><span class="p">(</span>
+    <span class="n">source</span><span class="p">,</span>
+    <span class="n">target</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Copy directory. Overwrite target folder if it exists.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">copy_clobber</span><span class="p">(</span><span class="k">source</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Copy directory. Overwrite target folder if it exists.&quot;&quot;&quot;</span>
+
+    <span class="n">rm_dir_if_exists</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+    <span class="n">shutil</span><span class="p">.</span><span class="n">copytree</span><span class="p">(</span><span class="k">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+
+    <span class="n">LOG</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="ss">&quot;Copied: %s --&gt; %s&quot;</span><span class="p">,</span> <span class="k">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="count_str_whitespace">count_str_whitespace</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">count_str_whitespace</span><span class="p">(</span>
+    <span class="n">mystr</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Counts no of whitespace in string and returns an int.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">count_str_whitespace</span><span class="p">(</span><span class="n">mystr</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Counts no of whitespace in string and returns an int.&quot;&quot;&quot;</span>
+
+    <span class="k">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">mychar</span> <span class="k">in</span> <span class="n">mystr</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">mychar</span><span class="p">.</span><span class="n">isspace</span><span class="p">():</span>
+
+            <span class="k">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="k">count</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="delete_file">delete_file</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">delete_file</span><span class="p">(</span>
+    <span class="n">file_name</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Deletes a file from disk.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">delete_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Deletes a file from disk.&quot;&quot;&quot;</span>
+
+    <span class="n">try</span><span class="p">:</span>
+
+        <span class="n">os</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+
+        <span class="n">LOG</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="ss">&quot;Log file %s deleted from local drive&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="n">OSError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="p">.</span><span class="n">warning</span><span class="p">(</span><span class="ss">&quot;Log file %s does not exist %s&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="delfiles_not_in_list">delfiles_not_in_list</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">delfiles_not_in_list</span><span class="p">(</span>
+    <span class="n">folder</span><span class="p">,</span>
+    <span class="n">exclude_list</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Delete all files in folder aprt from those in exclude list.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">delfiles_not_in_list</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">exclude_list</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Delete all files in folder aprt from those in exclude list.&quot;&quot;&quot;</span>
+
+    <span class="o">###</span> <span class="k">prepare</span> <span class="k">delete</span> <span class="n">list</span>
+
+    <span class="n">del_files</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+
+    <span class="o">#</span> <span class="n">TODO</span><span class="p">:</span> <span class="n">this</span> <span class="k">is</span> <span class="n">repeated</span> <span class="k">in</span> <span class="n">rm_col_names</span> <span class="p">(</span><span class="n">generalise</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">excl_str</span> <span class="k">in</span> <span class="n">exclude_list</span><span class="p">:</span>
+
+        <span class="n">try</span><span class="p">:</span>
+
+            <span class="n">del_files</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">excl_str</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="p">(</span><span class="n">ValueError</span><span class="p">,</span> <span class="n">KeyError</span><span class="p">):</span>
+
+            <span class="n">pass</span>
+
+    <span class="o">###</span> <span class="k">delete</span> <span class="n">files</span>
+
+    <span class="k">for</span> <span class="n">rmfile</span> <span class="k">in</span> <span class="n">del_files</span><span class="p">:</span>
+
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="k">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">rmfile</span><span class="p">)</span>
+
+        <span class="n">try</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+
+                <span class="n">os</span><span class="p">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="k">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+
+            <span class="n">print</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+
+    <span class="k">return</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="rm_dir_if_exists">rm_dir_if_exists</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">rm_dir_if_exists</span><span class="p">(</span>
+    <span class="n">target</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Remove file directory if it exists.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">rm_dir_if_exists</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Remove file directory if it exists.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="k">exists</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+
+        <span class="n">shutil</span><span class="p">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="rm_fil_if_exists">rm_fil_if_exists</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">rm_fil_if_exists</span><span class="p">(</span>
+    <span class="n">target</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">rm_fil_if_exists</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+
+    <span class="o">#</span>  <span class="n">so</span> <span class="n">we</span> <span class="n">should</span> <span class="k">check</span> <span class="k">if</span> <span class="n">file</span> <span class="k">exists</span> <span class="k">or</span> <span class="k">not</span> <span class="k">not</span> <span class="k">before</span> <span class="n">deleting</span> <span class="n">them</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="k">exists</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+
+        <span class="n">os</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="p">.</span><span class="n">warning</span><span class="p">(</span><span class="ss">&quot;Delete file attempt failed for %s&quot;</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="select_os_things">select_os_things</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">select_os_things</span><span class="p">(</span>
+    <span class="n">my_wd</span><span class="o">=</span><span class="s1">&#39;./&#39;</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;file&#39;</span><span class="p">,</span>
+    <span class="n">suf_pre</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">exclude_list</span><span class="o">=</span><span class="p">[]</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Create a filtered list of os type items.
+Mode can be folder, file, suffix, prefix.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">select_os_things</span><span class="p">(</span><span class="n">my_wd</span><span class="o">=</span><span class="ss">&quot;./&quot;</span><span class="p">,</span> <span class="k">mode</span><span class="o">=</span><span class="ss">&quot;file&quot;</span><span class="p">,</span> <span class="n">suf_pre</span><span class="o">=</span><span class="ss">&quot;&quot;</span><span class="p">,</span> <span class="n">exclude_list</span><span class="o">=</span><span class="p">[]):</span>
+
+    <span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">    Create a filtered list of os type items.</span>
+
+<span class="ss">    Mode can be folder, file, suffix, prefix.</span>
+
+<span class="ss">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="k">mode</span> <span class="o">==</span> <span class="ss">&quot;folder&quot;</span><span class="p">:</span>
+
+        <span class="n">os_thing_list</span> <span class="o">=</span> <span class="p">[</span>
+
+            <span class="n">thing</span>
+
+            <span class="k">for</span> <span class="n">thing</span> <span class="k">in</span> <span class="n">os</span><span class="p">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">my_wd</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">thing</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">thing</span> <span class="k">not</span> <span class="k">in</span> <span class="n">exclude_list</span>
+
+        <span class="p">]</span>
+
+    <span class="n">elif</span> <span class="k">mode</span> <span class="o">==</span> <span class="ss">&quot;file&quot;</span><span class="p">:</span>
+
+        <span class="n">os_thing_list</span> <span class="o">=</span> <span class="p">[</span>
+
+            <span class="n">thing</span>
+
+            <span class="k">for</span> <span class="n">thing</span> <span class="k">in</span> <span class="n">os</span><span class="p">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">my_wd</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">thing</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">thing</span> <span class="k">not</span> <span class="k">in</span> <span class="n">exclude_list</span>
+
+        <span class="p">]</span>
+
+    <span class="n">elif</span> <span class="k">mode</span> <span class="o">==</span> <span class="ss">&quot;suffix&quot;</span><span class="p">:</span>
+
+        <span class="n">os_thing_list</span> <span class="o">=</span> <span class="p">[</span>
+
+            <span class="n">thing</span>
+
+            <span class="k">for</span> <span class="n">thing</span> <span class="k">in</span> <span class="n">os</span><span class="p">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">my_wd</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">thing</span><span class="p">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">suf_pre</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">thing</span> <span class="k">not</span> <span class="k">in</span> <span class="n">exclude_list</span>
+
+        <span class="p">]</span>
+
+    <span class="n">elif</span> <span class="k">mode</span> <span class="o">==</span> <span class="ss">&quot;prefix&quot;</span><span class="p">:</span>
+
+        <span class="n">os_thing_list</span> <span class="o">=</span> <span class="p">[</span>
+
+            <span class="n">thing</span>
+
+            <span class="k">for</span> <span class="n">thing</span> <span class="k">in</span> <span class="n">os</span><span class="p">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">my_wd</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">thing</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">suf_pre</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">thing</span> <span class="k">not</span> <span class="k">in</span> <span class="n">exclude_list</span>
+
+        <span class="p">]</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="p">.</span><span class="n">critical</span><span class="p">(</span><span class="ss">&quot;Incorrect mode: %s&quot;</span><span class="p">,</span> <span class="k">mode</span><span class="p">)</span>
+
+        <span class="n">sys</span><span class="p">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">os_thing_list</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="unify_dic_key">unify_dic_key</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">unify_dic_key</span><span class="p">(</span>
+    <span class="n">key</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">unify_dic_key</span><span class="p">(</span><span class="k">key</span><span class="p">):</span>
+
+    <span class="n">unifiedkey</span> <span class="o">=</span> <span class="k">key</span><span class="p">.</span><span class="k">replace</span><span class="p">(</span><span class="ss">&quot;_&quot;</span><span class="p">,</span> <span class="ss">&quot;&quot;</span><span class="p">).</span><span class="k">replace</span><span class="p">(</span><span class="ss">&quot;-&quot;</span><span class="p">,</span> <span class="ss">&quot;&quot;</span><span class="p">).</span><span class="k">lower</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">unifiedkey</span>
+</code></pre></div>
+
+
+</details>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../plotter_tools/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../plotter_tools/" class="btn btn-xs btn-link">
+        Plotter Tools
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../" class="btn btn-xs btn-link">
+        Index
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+      <p>
+        <a href="https://home-meatware/meatware/helpohelpo.git">helpohelpo</a>
+      </p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="https://home-meatware/meatware/helpohelpo.git">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

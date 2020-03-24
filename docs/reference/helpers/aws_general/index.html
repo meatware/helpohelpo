@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Aws General - helpohelpo</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Module helpers.aws_general", url: "#_top", children: [
+              {title: "Variables", url: "#variables" },
+              {title: "Functions", url: "#functions" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script>
+      <script src="../../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../check_env_vars/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../check_env_vars/" class="btn btn-xs btn-link">
+        Check Env Vars
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../.." class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../.." class="btn btn-xs btn-link">
+        Home
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="module-helpersaws_general">Module helpers.aws_general</h1>
+<p>General Boto3 convenience module.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="sd">&quot;&quot;&quot;General Boto3 convenience module.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">boto3</span>
+
+<span class="kn">import</span> <span class="nn">botocore.exceptions</span>
+
+<span class="kn">from</span> <span class="nn">botocore.client</span> <span class="kn">import</span> <span class="n">ClientError</span>
+
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">boto_session</span><span class="p">(</span><span class="n">region</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Initialise boto3 session.&quot;&quot;&quot;</span>
+
+    <span class="n">session</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">Session</span><span class="p">(</span><span class="n">region_name</span><span class="o">=</span><span class="n">region</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">session</span>
+
+<span class="k">def</span> <span class="nf">_add_ec2_tags</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">ec2_list</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Add schedule_deletion tag to ec2 instances.&quot;&quot;&quot;</span>
+
+    <span class="n">ec2_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s2">&quot;ec2&quot;</span><span class="p">,</span> <span class="n">region_name</span><span class="o">=</span><span class="n">region</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ec2_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+        <span class="n">ec2_tag_status</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ec2_tag_statuses&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+
+        <span class="n">aws_sd_tag_val</span> <span class="o">=</span> <span class="n">helpo</span><span class="o">.</span><span class="n">calc_ndays_fwd</span><span class="p">(</span><span class="n">ndays</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ec2_instance</span> <span class="ow">in</span> <span class="n">ec2_list</span><span class="p">:</span>
+
+            <span class="n">del_tag_status</span> <span class="o">=</span> <span class="n">try_except_status</span><span class="p">(</span>
+
+                <span class="n">partial</span><span class="p">(</span>
+
+                    <span class="n">ec2_client</span><span class="o">.</span><span class="n">create_tags</span><span class="p">,</span>
+
+                    <span class="n">Resources</span><span class="o">=</span><span class="p">[</span><span class="n">ec2_instance</span><span class="p">],</span>
+
+                    <span class="n">Tags</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;Key&quot;</span><span class="p">:</span> <span class="s2">&quot;schedule_deletion&quot;</span><span class="p">,</span> <span class="s2">&quot;Value&quot;</span><span class="p">:</span> <span class="n">aws_sd_tag_val</span><span class="p">}],</span>
+
+                <span class="p">),</span>
+
+                <span class="s2">&quot;Error in del_tag_status: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+
+            <span class="p">)</span>
+
+            <span class="n">ec2_tag_status</span><span class="p">[</span><span class="s2">&quot;ec2_tag_statuses&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+
+                <span class="p">{</span><span class="s2">&quot;ec2_instance&quot;</span><span class="p">:</span> <span class="n">ec2_instance</span><span class="p">,</span> <span class="s2">&quot;del_tag_status&quot;</span><span class="p">:</span> <span class="n">del_tag_status</span><span class="p">}</span>
+
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ec2_tag_status</span>
+
+    <span class="k">return</span> <span class="p">{}</span>
+
+<span class="k">def</span> <span class="nf">search_ec2_instances</span><span class="p">(</span><span class="n">ec2_client</span><span class="p">,</span> <span class="n">filter_data</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;search aws region for ec2 instances to delete.&quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="n">ec2_client</span><span class="o">.</span><span class="n">describe_instances</span><span class="p">(</span><span class="n">Filters</span><span class="o">=</span><span class="n">filter_data</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">response</span>
+
+    <span class="k">except</span> <span class="n">ClientError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="bp">False</span>
+
+<span class="k">def</span> <span class="nf">terminate_instance</span><span class="p">(</span><span class="n">instance_id</span><span class="p">,</span> <span class="n">region_name</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Terminates ec2 instance by id.&quot;&quot;&quot;</span>
+
+    <span class="n">ec2</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s2">&quot;ec2&quot;</span><span class="p">,</span> <span class="n">region_name</span><span class="o">=</span><span class="n">region_name</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+
+        <span class="n">ec2</span><span class="o">.</span><span class="n">Instance</span><span class="p">(</span><span class="n">instance_id</span><span class="p">)</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+
+    <span class="k">except</span> <span class="n">ClientError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">err</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;Error&quot;</span><span class="p">][</span><span class="s2">&quot;Code&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;OperationNotPermitted&quot;</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="s2">&quot;&lt;!here|here&gt; Warning! Modify termination protection: &quot;</span> <span class="o">+</span> <span class="n">instance_id</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="s2">&quot;Uncaught error occured on termination: &quot;</span> <span class="o">+</span> <span class="n">instance_id</span>
+
+    <span class="k">return</span> <span class="s2">&quot;Successfully terminated&quot;</span>
+
+<span class="k">def</span> <span class="nf">shutdown_instance</span><span class="p">(</span><span class="n">instance_id</span><span class="p">,</span> <span class="n">region_name</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Shutdown ec2 instance by id.&quot;&quot;&quot;</span>
+
+    <span class="n">bo3_int</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">Session</span><span class="p">(</span><span class="n">region_name</span><span class="o">=</span><span class="n">region_name</span><span class="p">)</span>
+
+    <span class="n">ec2</span> <span class="o">=</span> <span class="n">bo3_int</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s2">&quot;ec2&quot;</span><span class="p">,</span> <span class="n">region_name</span><span class="o">=</span><span class="n">region_name</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+
+        <span class="n">ec2</span><span class="o">.</span><span class="n">Instance</span><span class="p">(</span><span class="n">instance_id</span><span class="p">)</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+
+    <span class="k">except</span> <span class="n">ClientError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Shutdown Error: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="s2">&quot;Uncaught error occured on shut down: &quot;</span> <span class="o">+</span> <span class="n">instance_id</span>
+
+    <span class="k">return</span> <span class="s2">&quot;Successfully shutdown&quot;</span>
+
+<span class="k">def</span> <span class="nf">check_bucket_exists</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Sanity check whether s3 bucket exists.&quot;&quot;&quot;</span>
+
+    <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s2">&quot;s3&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+
+        <span class="n">s3_client</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">head_bucket</span><span class="p">(</span><span class="n">Bucket</span><span class="o">=</span><span class="n">bucket_name</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="n">ClientError</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;s3 bucket </span><span class="si">%s</span><span class="s2"> does not exist or access denied&quot;</span><span class="p">,</span> <span class="n">bucket_name</span><span class="p">)</span>
+
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">upload_logs_s3</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">,</span> <span class="n">log_name</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Upload log data to s3 bucket.&quot;&quot;&quot;</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">log_name</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span>
+
+    <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s2">&quot;s3&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+
+        <span class="n">s3_client</span><span class="o">.</span><span class="n">Bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span><span class="o">.</span><span class="n">put_object</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="n">log_name</span><span class="p">,</span> <span class="n">Body</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Uploading log file </span><span class="si">%s</span><span class="s2"> to s3 </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_name</span><span class="p">,</span> <span class="n">bucket_name</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Failed to Upload log file </span><span class="si">%s</span><span class="s2"> to s3 </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_name</span><span class="p">,</span> <span class="n">bucket_name</span><span class="p">)</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;error: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="bp">True</span>
+
+<span class="k">def</span> <span class="nf">tagapi_search_tags</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+
+    <span class="k">try</span><span class="p">:</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_resources</span><span class="p">(</span>
+
+            <span class="n">PaginationToken</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>
+
+            <span class="n">TagFilters</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;Key&quot;</span><span class="p">:</span> <span class="s2">&quot;schedule_deletion&quot;</span><span class="p">}],</span>
+
+            <span class="n">ResourcesPerPage</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+
+            <span class="n">ResourceTypeFilters</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;elasticloadbalancing:loadbalancer&quot;</span><span class="p">,],</span>
+
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">response</span>
+
+    <span class="k">except</span> <span class="n">ClientError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">convert_http_status</span><span class="p">(</span><span class="n">status</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Converts HTTP 200 to OK or dispays error message</span>
+
+<span class="sd">    from def try_except_status.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+
+        <span class="k">return</span> <span class="s2">&quot;: *OK*&quot;</span>
+
+    <span class="k">return</span> <span class="s2">&quot;: *FAIL - &quot;</span> <span class="o">+</span> <span class="n">status</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span>
+
+<span class="k">def</span> <span class="nf">try_except_status</span><span class="p">(</span><span class="n">bo3_client_method</span><span class="p">,</span> <span class="n">fail_str</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Takes a partially applied fuction passed to it</span>
+
+<span class="sd">    so that it catches status codes/errors in a generalised way</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+
+        <span class="n">get_status</span> <span class="o">=</span> <span class="n">bo3_client_method</span>
+
+        <span class="n">status</span> <span class="o">=</span> <span class="n">get_status</span><span class="p">()[</span><span class="s2">&quot;ResponseMetadata&quot;</span><span class="p">][</span><span class="s2">&quot;HTTPStatusCode&quot;</span><span class="p">]</span>
+
+    <span class="k">except</span> <span class="n">ClientError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">fail_str</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">err</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;Error&quot;</span><span class="p">][</span><span class="s2">&quot;Code&quot;</span><span class="p">]:</span>
+
+            <span class="n">status</span> <span class="o">=</span> <span class="n">err</span><span class="o">.</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;Error&quot;</span><span class="p">][</span><span class="s2">&quot;Code&quot;</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">status</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">status</span>
+</code></pre></div>
+
+
+</details>
+<h2 id="variables">Variables</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">LOG</span>
+</code></pre></div>
+
+
+<h2 id="functions">Functions</h2>
+<h3 id="boto_session">boto_session</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">boto_session</span><span class="p">(</span>
+    <span class="n">region</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Initialise boto3 session.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">boto_session</span><span class="p">(</span><span class="n">region</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Initialise boto3 session.&quot;&quot;&quot;</span>
+
+    <span class="k">session</span> <span class="o">=</span> <span class="n">boto3</span><span class="p">.</span><span class="k">Session</span><span class="p">(</span><span class="n">region_name</span><span class="o">=</span><span class="n">region</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="k">session</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="check_bucket_exists">check_bucket_exists</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">check_bucket_exists</span><span class="p">(</span>
+    <span class="n">bucket_name</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Sanity check whether s3 bucket exists.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">check_bucket_exists</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Sanity check whether s3 bucket exists.&quot;&quot;&quot;</span>
+
+    <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="p">.</span><span class="n">resource</span><span class="p">(</span><span class="ss">&quot;s3&quot;</span><span class="p">)</span>
+
+    <span class="n">try</span><span class="p">:</span>
+
+        <span class="n">s3_client</span><span class="p">.</span><span class="n">meta</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">head_bucket</span><span class="p">(</span><span class="n">Bucket</span><span class="o">=</span><span class="n">bucket_name</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="n">ClientError</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="p">.</span><span class="n">critical</span><span class="p">(</span><span class="ss">&quot;s3 bucket %s does not exist or access denied&quot;</span><span class="p">,</span> <span class="n">bucket_name</span><span class="p">)</span>
+
+        <span class="n">sys</span><span class="p">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="convert_http_status">convert_http_status</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">convert_http_status</span><span class="p">(</span>
+    <span class="n">status</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Converts HTTP 200 to OK or dispays error message
+from def try_except_status.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">convert_http_status</span><span class="p">(</span><span class="n">status</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Converts HTTP 200 to OK or dispays error message</span>
+
+<span class="ss">    from def try_except_status.</span>
+
+<span class="ss">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+
+        <span class="k">return</span> <span class="ss">&quot;: *OK*&quot;</span>
+
+    <span class="k">return</span> <span class="ss">&quot;: *FAIL - &quot;</span> <span class="o">+</span> <span class="n">status</span> <span class="o">+</span> <span class="ss">&quot;*&quot;</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="search_ec2_instances">search_ec2_instances</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">search_ec2_instances</span><span class="p">(</span>
+    <span class="n">ec2_client</span><span class="p">,</span>
+    <span class="n">filter_data</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>search aws region for ec2 instances to delete.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">search_ec2_instances</span><span class="p">(</span><span class="n">ec2_client</span><span class="p">,</span> <span class="n">filter_data</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;search aws region for ec2 instances to delete.&quot;&quot;&quot;</span>
+
+    <span class="n">try</span><span class="p">:</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="n">ec2_client</span><span class="p">.</span><span class="n">describe_instances</span><span class="p">(</span><span class="n">Filters</span><span class="o">=</span><span class="n">filter_data</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">response</span>
+
+    <span class="k">except</span> <span class="n">ClientError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="p">.</span><span class="n">warning</span><span class="p">(</span><span class="ss">&quot;%s&quot;</span><span class="p">,</span> <span class="n">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="k">False</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="shutdown_instance">shutdown_instance</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">shutdown_instance</span><span class="p">(</span>
+    <span class="n">instance_id</span><span class="p">,</span>
+    <span class="n">region_name</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Shutdown ec2 instance by id.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">shutdown_instance</span><span class="p">(</span><span class="n">instance_id</span><span class="p">,</span> <span class="n">region_name</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Shutdown ec2 instance by id.&quot;&quot;&quot;</span>
+
+    <span class="n">bo3_int</span> <span class="o">=</span> <span class="n">boto3</span><span class="p">.</span><span class="k">Session</span><span class="p">(</span><span class="n">region_name</span><span class="o">=</span><span class="n">region_name</span><span class="p">)</span>
+
+    <span class="n">ec2</span> <span class="o">=</span> <span class="n">bo3_int</span><span class="p">.</span><span class="n">resource</span><span class="p">(</span><span class="ss">&quot;ec2&quot;</span><span class="p">,</span> <span class="n">region_name</span><span class="o">=</span><span class="n">region_name</span><span class="p">)</span>
+
+    <span class="n">try</span><span class="p">:</span>
+
+        <span class="n">ec2</span><span class="p">.</span><span class="n">Instance</span><span class="p">(</span><span class="n">instance_id</span><span class="p">).</span><span class="n">stop</span><span class="p">()</span>
+
+    <span class="k">except</span> <span class="n">ClientError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="p">.</span><span class="n">warning</span><span class="p">(</span><span class="ss">&quot;Shutdown Error: %s&quot;</span><span class="p">,</span> <span class="n">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="ss">&quot;Uncaught error occured on shut down: &quot;</span> <span class="o">+</span> <span class="n">instance_id</span>
+
+    <span class="k">return</span> <span class="ss">&quot;Successfully shutdown&quot;</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="tagapi_search_tags">tagapi_search_tags</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">tagapi_search_tags</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">,</span>
+    <span class="n">token</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">tagapi_search_tags</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+
+    <span class="n">try</span><span class="p">:</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_resources</span><span class="p">(</span>
+
+            <span class="n">PaginationToken</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>
+
+            <span class="n">TagFilters</span><span class="o">=</span><span class="p">[</span><span class="err">{</span><span class="ss">&quot;Key&quot;</span><span class="p">:</span> <span class="ss">&quot;schedule_deletion&quot;</span><span class="err">}</span><span class="p">],</span>
+
+            <span class="n">ResourcesPerPage</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+
+            <span class="n">ResourceTypeFilters</span><span class="o">=</span><span class="p">[</span><span class="ss">&quot;elasticloadbalancing:loadbalancer&quot;</span><span class="p">,],</span>
+
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">response</span>
+
+    <span class="k">except</span> <span class="n">ClientError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="p">.</span><span class="n">warning</span><span class="p">(</span><span class="ss">&quot;%s&quot;</span><span class="p">,</span> <span class="n">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="terminate_instance">terminate_instance</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">terminate_instance</span><span class="p">(</span>
+    <span class="n">instance_id</span><span class="p">,</span>
+    <span class="n">region_name</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Terminates ec2 instance by id.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">terminate_instance</span><span class="p">(</span><span class="n">instance_id</span><span class="p">,</span> <span class="n">region_name</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Terminates ec2 instance by id.&quot;&quot;&quot;</span>
+
+    <span class="n">ec2</span> <span class="o">=</span> <span class="n">boto3</span><span class="p">.</span><span class="n">resource</span><span class="p">(</span><span class="ss">&quot;ec2&quot;</span><span class="p">,</span> <span class="n">region_name</span><span class="o">=</span><span class="n">region_name</span><span class="p">)</span>
+
+    <span class="n">try</span><span class="p">:</span>
+
+        <span class="n">ec2</span><span class="p">.</span><span class="n">Instance</span><span class="p">(</span><span class="n">instance_id</span><span class="p">).</span><span class="k">terminate</span><span class="p">()</span>
+
+    <span class="k">except</span> <span class="n">ClientError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="p">.</span><span class="n">warning</span><span class="p">(</span><span class="ss">&quot;%s&quot;</span><span class="p">,</span> <span class="n">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">err</span><span class="p">.</span><span class="n">response</span><span class="p">[</span><span class="ss">&quot;Error&quot;</span><span class="p">][</span><span class="ss">&quot;Code&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="ss">&quot;OperationNotPermitted&quot;</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="ss">&quot;&lt;!here|here&gt; Warning! Modify termination protection: &quot;</span> <span class="o">+</span> <span class="n">instance_id</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="ss">&quot;Uncaught error occured on termination: &quot;</span> <span class="o">+</span> <span class="n">instance_id</span>
+
+    <span class="k">return</span> <span class="ss">&quot;Successfully terminated&quot;</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="try_except_status">try_except_status</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">try_except_status</span><span class="p">(</span>
+    <span class="n">bo3_client_method</span><span class="p">,</span>
+    <span class="n">fail_str</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Takes a partially applied fuction passed to it
+so that it catches status codes/errors in a generalised way</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">try_except_status</span><span class="p">(</span><span class="n">bo3_client_method</span><span class="p">,</span> <span class="n">fail_str</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Takes a partially applied fuction passed to it</span>
+
+<span class="ss">    so that it catches status codes/errors in a generalised way</span>
+
+<span class="ss">    &quot;&quot;&quot;</span>
+
+    <span class="n">try</span><span class="p">:</span>
+
+        <span class="n">get_status</span> <span class="o">=</span> <span class="n">bo3_client_method</span>
+
+        <span class="n">status</span> <span class="o">=</span> <span class="n">get_status</span><span class="p">()[</span><span class="ss">&quot;ResponseMetadata&quot;</span><span class="p">][</span><span class="ss">&quot;HTTPStatusCode&quot;</span><span class="p">]</span>
+
+    <span class="k">except</span> <span class="n">ClientError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="p">.</span><span class="n">warning</span><span class="p">(</span><span class="n">fail_str</span><span class="p">,</span> <span class="n">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">err</span><span class="p">.</span><span class="n">response</span><span class="p">[</span><span class="ss">&quot;Error&quot;</span><span class="p">][</span><span class="ss">&quot;Code&quot;</span><span class="p">]:</span>
+
+            <span class="n">status</span> <span class="o">=</span> <span class="n">err</span><span class="p">.</span><span class="n">response</span><span class="p">[</span><span class="ss">&quot;Error&quot;</span><span class="p">][</span><span class="ss">&quot;Code&quot;</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">status</span> <span class="o">=</span> <span class="n">str</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">status</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="upload_logs_s3">upload_logs_s3</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">upload_logs_s3</span><span class="p">(</span>
+    <span class="n">bucket_name</span><span class="p">,</span>
+    <span class="n">log_name</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Upload log data to s3 bucket.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">upload_logs_s3</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">,</span> <span class="n">log_name</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Upload log data to s3 bucket.&quot;&quot;&quot;</span>
+
+    <span class="k">data</span> <span class="o">=</span> <span class="k">open</span><span class="p">(</span><span class="n">log_name</span><span class="p">,</span> <span class="ss">&quot;rb&quot;</span><span class="p">)</span>
+
+    <span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="p">.</span><span class="n">resource</span><span class="p">(</span><span class="ss">&quot;s3&quot;</span><span class="p">)</span>
+
+    <span class="n">try</span><span class="p">:</span>
+
+        <span class="n">s3_client</span><span class="p">.</span><span class="n">Bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">).</span><span class="n">put_object</span><span class="p">(</span><span class="k">Key</span><span class="o">=</span><span class="n">log_name</span><span class="p">,</span> <span class="n">Body</span><span class="o">=</span><span class="k">data</span><span class="p">)</span>
+
+        <span class="n">LOG</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="ss">&quot;Uploading log file %s to s3 %s&quot;</span><span class="p">,</span> <span class="n">log_name</span><span class="p">,</span> <span class="n">bucket_name</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="k">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+
+        <span class="n">LOG</span><span class="p">.</span><span class="n">warning</span><span class="p">(</span><span class="ss">&quot;Failed to Upload log file %s to s3 %s&quot;</span><span class="p">,</span> <span class="n">log_name</span><span class="p">,</span> <span class="n">bucket_name</span><span class="p">)</span>
+
+        <span class="n">LOG</span><span class="p">.</span><span class="n">critical</span><span class="p">(</span><span class="ss">&quot;error: %s&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="k">True</span>
+</code></pre></div>
+
+
+</details>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../check_env_vars/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../check_env_vars/" class="btn btn-xs btn-link">
+        Check Env Vars
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../.." class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../.." class="btn btn-xs btn-link">
+        Home
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+      <p>
+        <a href="https://home-meatware/meatware/helpohelpo.git">helpohelpo</a>
+      </p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="https://home-meatware/meatware/helpohelpo.git">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Data Structure Search - helpohelpo</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Module helpers.data_structure_search", url: "#_top", children: [
+              {title: "Functions", url: "#functions" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script>
+      <script src="../../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../date_tools/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../date_tools/" class="btn btn-xs btn-link">
+        Date Tools
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../check_env_vars/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../check_env_vars/" class="btn btn-xs btn-link">
+        Check Env Vars
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="module-helpersdata_structure_search">Module helpers.data_structure_search</h1>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">collections</span>
+
+<span class="k">def</span> <span class="nf">find_nested_key</span><span class="p">(</span><span class="n">my_json</span><span class="p">,</span> <span class="n">find_key</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Search in a nested dict for a key or None.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">find_key</span> <span class="ow">in</span> <span class="n">my_json</span><span class="p">:</span>
+
+        <span class="k">return</span> <span class="n">my_json</span><span class="p">[</span><span class="n">find_key</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">vval</span> <span class="ow">in</span> <span class="n">my_json</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vval</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+
+            <span class="n">item</span> <span class="o">=</span> <span class="n">find_nested_key</span><span class="p">(</span><span class="n">vval</span><span class="p">,</span> <span class="n">find_key</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+
+                <span class="k">return</span> <span class="n">item</span>
+
+    <span class="k">return</span> <span class="bp">None</span>
+
+<span class="k">def</span> <span class="nf">nested_dic_update</span><span class="p">(</span><span class="n">base_dic</span><span class="p">,</span> <span class="n">in_dic</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot; Recursively merge two nested dictionaries together.&quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">kkey</span><span class="p">,</span> <span class="n">vval</span> <span class="ow">in</span> <span class="n">in_dic</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vval</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
+
+            <span class="n">recursive_call</span> <span class="o">=</span> <span class="n">nested_dic_update</span><span class="p">(</span><span class="n">base_dic</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">kkey</span><span class="p">,</span> <span class="p">{}),</span> <span class="n">vval</span><span class="p">)</span>
+
+            <span class="n">base_dic</span><span class="p">[</span><span class="n">kkey</span><span class="p">]</span> <span class="o">=</span> <span class="n">recursive_call</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">base_dic</span><span class="p">[</span><span class="n">kkey</span><span class="p">]</span> <span class="o">=</span> <span class="n">in_dic</span><span class="p">[</span><span class="n">kkey</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">base_dic</span>
+
+<span class="k">def</span> <span class="nf">find_replace_dict_values</span><span class="p">(</span><span class="n">mydict</span><span class="p">,</span> <span class="n">search_key</span><span class="p">,</span> <span class="n">old_value</span><span class="p">,</span> <span class="n">new_value</span><span class="p">):</span>
+
+    <span class="s2">&quot;Recursively find and replace values in a nested dict&quot;</span>
+
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">mydict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">search_key</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="n">old_value</span><span class="p">:</span>
+
+                <span class="n">mydict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_value</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mydict</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+
+            <span class="n">find_replace_dict_values</span><span class="p">(</span><span class="n">mydict</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">search_key</span><span class="p">,</span> <span class="n">old_value</span><span class="p">,</span> <span class="n">new_value</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mydict</span>
+</code></pre></div>
+
+
+</details>
+<h2 id="functions">Functions</h2>
+<h3 id="find_nested_key">find_nested_key</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">find_nested_key</span><span class="p">(</span>
+    <span class="n">my_json</span><span class="p">,</span>
+    <span class="n">find_key</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Search in a nested dict for a key or None.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">find_nested_key</span><span class="p">(</span><span class="n">my_json</span><span class="p">,</span><span class="w"> </span><span class="n">find_key</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="ss">&quot;&quot;&quot;Search in a nested dict for a key or None.&quot;&quot;&quot;</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">find_key</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">my_json</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">my_json</span><span class="o">[</span><span class="n">find_key</span><span class="o">]</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">vval</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">my_json</span><span class="p">.</span><span class="n">items</span><span class="p">()</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">isinstance</span><span class="p">(</span><span class="n">vval</span><span class="p">,</span><span class="w"> </span><span class="n">dict</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">            </span><span class="n">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">find_nested_key</span><span class="p">(</span><span class="n">vval</span><span class="p">,</span><span class="w"> </span><span class="n">find_key</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="k">None</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">item</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">None</span><span class="w"></span>
+</code></pre></div>
+
+
+</details>
+<h3 id="find_replace_dict_values">find_replace_dict_values</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">find_replace_dict_values</span><span class="p">(</span>
+    <span class="n">mydict</span><span class="p">,</span>
+    <span class="n">search_key</span><span class="p">,</span>
+    <span class="n">old_value</span><span class="p">,</span>
+    <span class="n">new_value</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Recursively find and replace values in a nested dict</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">find_replace_dict_values</span><span class="p">(</span><span class="n">mydict</span><span class="p">,</span><span class="w"> </span><span class="n">search_key</span><span class="p">,</span><span class="w"> </span><span class="n">old_value</span><span class="p">,</span><span class="w"> </span><span class="n">new_value</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="ss">&quot;Recursively find and replace values in a nested dict&quot;</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="k">key</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">mydict</span><span class="p">.</span><span class="n">items</span><span class="p">()</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nl">search_key</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="n">val</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nl">old_value</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">                </span><span class="n">mydict</span><span class="o">[</span><span class="n">key</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">new_value</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">elif</span><span class="w"> </span><span class="n">isinstance</span><span class="p">(</span><span class="n">mydict</span><span class="o">[</span><span class="n">key</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">dict</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">            </span><span class="n">find_replace_dict_values</span><span class="p">(</span><span class="n">mydict</span><span class="o">[</span><span class="n">key</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">search_key</span><span class="p">,</span><span class="w"> </span><span class="n">old_value</span><span class="p">,</span><span class="w"> </span><span class="n">new_value</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">mydict</span><span class="w"></span>
+</code></pre></div>
+
+
+</details>
+<h3 id="nested_dic_update">nested_dic_update</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">nested_dic_update</span><span class="p">(</span>
+    <span class="n">base_dic</span><span class="p">,</span>
+    <span class="n">in_dic</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Recursively merge two nested dictionaries together.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">nested_dic_update</span><span class="p">(</span><span class="n">base_dic</span><span class="p">,</span><span class="w"> </span><span class="n">in_dic</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="ss">&quot;&quot;&quot; Recursively merge two nested dictionaries together.&quot;&quot;&quot;</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">kkey</span><span class="p">,</span><span class="w"> </span><span class="n">vval</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">in_dic</span><span class="p">.</span><span class="n">items</span><span class="p">()</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">isinstance</span><span class="p">(</span><span class="n">vval</span><span class="p">,</span><span class="w"> </span><span class="n">collections</span><span class="p">.</span><span class="n">Mapping</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">            </span><span class="n">recursive_call</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nested_dic_update</span><span class="p">(</span><span class="n">base_dic</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="n">kkey</span><span class="p">,</span><span class="w"> </span><span class="err">{}</span><span class="p">),</span><span class="w"> </span><span class="n">vval</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">            </span><span class="n">base_dic</span><span class="o">[</span><span class="n">kkey</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">recursive_call</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">else</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">            </span><span class="n">base_dic</span><span class="o">[</span><span class="n">kkey</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in_dic</span><span class="o">[</span><span class="n">kkey</span><span class="o">]</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">base_dic</span><span class="w"></span>
+</code></pre></div>
+
+
+</details>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../date_tools/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../date_tools/" class="btn btn-xs btn-link">
+        Date Tools
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../check_env_vars/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../check_env_vars/" class="btn btn-xs btn-link">
+        Check Env Vars
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+      <p>
+        <a href="https://home-meatware/meatware/helpohelpo.git">helpohelpo</a>
+      </p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="https://home-meatware/meatware/helpohelpo.git">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

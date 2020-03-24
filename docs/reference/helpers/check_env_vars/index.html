@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Check Env Vars - helpohelpo</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Module helpers.check_env_vars", url: "#_top", children: [
+              {title: "Functions", url: "#functions" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script>
+      <script src="../../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../data_structure_search/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../data_structure_search/" class="btn btn-xs btn-link">
+        Data Structure Search
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../aws_general/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../aws_general/" class="btn btn-xs btn-link">
+        Aws General
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="module-helperscheck_env_vars">Module helpers.check_env_vars</h1>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="k">def</span> <span class="nf">check_env_vars</span><span class="p">():</span>
+
+    <span class="sd">&quot;&quot;&quot;Check aws &amp; github env variables required to run this script.&quot;&quot;&quot;</span>
+
+    <span class="n">AWS_ACCESS_KEY_ID</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;AWS_ACCESS_KEY_ID&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+    <span class="n">AWS_SECRET_ACCESS_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;AWS_SECRET_ACCESS_KEY&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+    <span class="c1"># GITHUB_TOKEN = os.environ.get(&quot;AWS_SECRET_ACCESS_KEY&quot;, None)</span>
+
+    <span class="c1"># GITHUB_TOKEN = &quot;&quot;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">AWS_ACCESS_KEY_ID</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">AWS_SECRET_ACCESS_KEY</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">):</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;AWS access keys not set. Exiting..&quot;</span><span class="p">)</span>
+
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;AWS config good. Continuing...&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+<h2 id="functions">Functions</h2>
+<h3 id="check_env_vars">check_env_vars</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">check_env_vars</span><span class="p">(</span>
+
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Check aws &amp; github env variables required to run this script.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">check_env_vars</span><span class="p">():</span>
+
+    <span class="ss">&quot;&quot;&quot;Check aws &amp; github env variables required to run this script.&quot;&quot;&quot;</span>
+
+    <span class="n">AWS_ACCESS_KEY_ID</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="ss">&quot;AWS_ACCESS_KEY_ID&quot;</span><span class="p">,</span> <span class="k">None</span><span class="p">)</span>
+
+    <span class="n">AWS_SECRET_ACCESS_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="ss">&quot;AWS_SECRET_ACCESS_KEY&quot;</span><span class="p">,</span> <span class="k">None</span><span class="p">)</span>
+
+    <span class="o">#</span> <span class="n">GITHUB_TOKEN</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="ss">&quot;AWS_SECRET_ACCESS_KEY&quot;</span><span class="p">,</span> <span class="k">None</span><span class="p">)</span>
+
+    <span class="o">#</span> <span class="n">GITHUB_TOKEN</span> <span class="o">=</span> <span class="ss">&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">AWS_ACCESS_KEY_ID</span> <span class="k">is</span> <span class="k">None</span><span class="p">)</span> <span class="k">or</span> <span class="p">(</span><span class="n">AWS_SECRET_ACCESS_KEY</span> <span class="k">is</span> <span class="k">None</span><span class="p">):</span>
+
+        <span class="n">LOG</span><span class="p">.</span><span class="n">critical</span><span class="p">(</span><span class="ss">&quot;AWS access keys not set. Exiting..&quot;</span><span class="p">)</span>
+
+        <span class="n">sys</span><span class="p">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">LOG</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="ss">&quot;AWS config good. Continuing...&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../data_structure_search/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../data_structure_search/" class="btn btn-xs btn-link">
+        Data Structure Search
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../aws_general/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../aws_general/" class="btn btn-xs btn-link">
+        Aws General
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+      <p>
+        <a href="https://home-meatware/meatware/helpohelpo.git">helpohelpo</a>
+      </p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="https://home-meatware/meatware/helpohelpo.git">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

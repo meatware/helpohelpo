@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Dynamic Loader - helpohelpo</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Module helpers.dynamic_loader", url: "#_top", children: [
+              {title: "Variables", url: "#variables" },
+              {title: "Functions", url: "#functions" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script>
+      <script src="../../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../file_tools/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../file_tools/" class="btn btn-xs btn-link">
+        File Tools
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../dateframe_tools/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../dateframe_tools/" class="btn btn-xs btn-link">
+        Dateframe Tools
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="module-helpersdynamic_loader">Module helpers.dynamic_loader</h1>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">inspect</span>
+
+<span class="kn">import</span> <span class="nn">importlib</span>
+
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_get_def_files</span><span class="p">(</span><span class="n">dirname</span><span class="p">):</span>
+
+    <span class="n">files</span> <span class="o">=</span> <span class="p">[</span>
+
+        <span class="n">fil</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.py&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">fil</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">dirname</span><span class="p">)</span> <span class="k">if</span> <span class="n">fil</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;test_&quot;</span><span class="p">)</span>
+
+    <span class="p">]</span>
+
+    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;def files found: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">files</span>
+
+<span class="k">def</span> <span class="nf">_import_func_defs</span><span class="p">(</span><span class="n">graphdef_files</span><span class="p">):</span>
+
+    <span class="n">_modules</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="s2">&quot;func_defs&quot;</span><span class="p">,</span> <span class="nb">globals</span><span class="p">(),</span> <span class="nb">locals</span><span class="p">(),</span> <span class="n">graphdef_files</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">_module_list</span> <span class="o">=</span> <span class="p">[</span>
+
+        <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">_modules</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">ismodule</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="p">]</span>
+
+    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;_module_list </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">_module_list</span><span class="p">)</span>
+
+    <span class="n">func_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">module_name</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">_module_list</span><span class="p">:</span>
+
+        <span class="c1"># print(&quot;*&quot;, module_name, val)</span>
+
+        <span class="n">mymodule</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;func_defs.&quot;</span> <span class="o">+</span> <span class="n">module_name</span><span class="p">)</span>
+
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; module Loaded </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">mymodule</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">oxo</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">mymodule</span><span class="p">):</span>
+
+            <span class="c1"># print(&quot;oxo&quot;, oxo)</span>
+
+            <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isfunction</span><span class="p">(</span><span class="n">oxo</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+
+                <span class="c1"># func_dict[&quot;function_name&quot;] = function</span>
+
+                <span class="n">func_name</span> <span class="o">=</span> <span class="n">oxo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="vm">__name__</span>
+
+                <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; func_name </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">func_name</span><span class="p">)</span>
+
+                <span class="n">func_dict</span><span class="p">[</span><span class="n">func_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">oxo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;No of function defs: </span><span class="si">%s</span><span class="s2"> &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">func_dict</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">func_dict</span>
+
+<span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">dirname</span><span class="p">):</span>
+
+    <span class="n">_func_def_files</span> <span class="o">=</span> <span class="n">_get_def_files</span><span class="p">(</span><span class="n">dirname</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_import_func_defs</span><span class="p">(</span><span class="n">_func_def_files</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+<h2 id="variables">Variables</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">LOG</span>
+</code></pre></div>
+
+
+<h2 id="functions">Functions</h2>
+<h3 id="load">load</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">load</span><span class="p">(</span>
+    <span class="n">dirname</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="k">load</span><span class="p">(</span><span class="n">dirname</span><span class="p">):</span>
+
+    <span class="n">_func_def_files</span> <span class="o">=</span> <span class="n">_get_def_files</span><span class="p">(</span><span class="n">dirname</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_import_func_defs</span><span class="p">(</span><span class="n">_func_def_files</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../file_tools/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../file_tools/" class="btn btn-xs btn-link">
+        File Tools
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../dateframe_tools/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../dateframe_tools/" class="btn btn-xs btn-link">
+        Dateframe Tools
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+      <p>
+        <a href="https://home-meatware/meatware/helpohelpo.git">helpohelpo</a>
+      </p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="https://home-meatware/meatware/helpohelpo.git">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

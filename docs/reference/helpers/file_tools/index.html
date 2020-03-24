@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>File Tools - helpohelpo</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Module helpers.file_tools", url: "#_top", children: [
+              {title: "Functions", url: "#functions" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script>
+      <script src="../../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../" class="btn btn-xs btn-link">
+        Index
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../dynamic_loader/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../dynamic_loader/" class="btn btn-xs btn-link">
+        Dynamic Loader
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="module-helpersfile_tools">Module helpers.file_tools</h1>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">json</span>
+
+<span class="k">def</span> <span class="nf">_find_my_yamls</span><span class="p">(</span><span class="n">myc_folder</span><span class="p">,</span> <span class="n">specific_files</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Load all .yaml files in a folder or a specific list of yaml files.&quot;&quot;&quot;</span>
+
+    <span class="n">selected_files</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="n">specific_files</span><span class="p">:</span>
+
+        <span class="n">yaml_list</span> <span class="o">=</span> <span class="n">specific_files</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+
+        <span class="n">all_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">myc_folder</span> <span class="o">+</span> <span class="n">yaml</span> <span class="k">for</span> <span class="n">yaml</span> <span class="ow">in</span> <span class="n">yaml_list</span><span class="p">]</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="n">all_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">myc_folder</span> <span class="o">+</span> <span class="s2">&quot;/*.yaml&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">all_files</span>
+
+<span class="k">def</span> <span class="nf">string_list_writer</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">list_holder</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Writes an outfile froim a list of strings.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+
+        <span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;w&quot;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span> <span class="k">as</span> <span class="nb">file</span><span class="p">:</span>
+
+        <span class="k">for</span> <span class="n">line_str</span> <span class="ow">in</span> <span class="n">list_holder</span><span class="p">:</span>
+
+            <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line_str</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">simple_text_writer</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Writes an outfile froim a list of strings.</span>
+
+<span class="sd">    Mode = r, w, etc str.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+
+        <span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;w&quot;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span> <span class="k">as</span> <span class="nb">file</span><span class="p">:</span>
+
+        <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">load_local_json2</span><span class="p">(</span><span class="n">data_file</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Return data from compact json file on a line-by-line basis.&quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">data_file</span><span class="p">:</span>
+
+        <span class="n">json_thing</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">json_thing</span>
+
+<span class="k">def</span> <span class="nf">load_local_json_generator</span><span class="p">(</span><span class="n">data_file</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Return data from compact json file on a line-by-line basis. Generator&quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">data_file</span><span class="p">:</span>
+
+        <span class="n">json_thing</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+        <span class="k">yield</span> <span class="n">json_thing</span>
+</code></pre></div>
+
+
+</details>
+<h2 id="functions">Functions</h2>
+<h3 id="load_local_json2">load_local_json2</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">load_local_json2</span><span class="p">(</span>
+    <span class="n">data_file</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Return data from compact json file on a line-by-line basis.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">load_local_json2</span><span class="p">(</span><span class="n">data_file</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Return data from compact json file on a line-by-line basis.&quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">line</span> <span class="k">in</span> <span class="n">data_file</span><span class="p">:</span>
+
+        <span class="n">json_thing</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">json_thing</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="load_local_json_generator">load_local_json_generator</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">load_local_json_generator</span><span class="p">(</span>
+    <span class="n">data_file</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Return data from compact json file on a line-by-line basis. Generator</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">load_local_json_generator</span><span class="p">(</span><span class="n">data_file</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Return data from compact json file on a line-by-line basis. Generator&quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">line</span> <span class="k">in</span> <span class="n">data_file</span><span class="p">:</span>
+
+        <span class="n">json_thing</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+        <span class="n">yield</span> <span class="n">json_thing</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="simple_text_writer">simple_text_writer</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">simple_text_writer</span><span class="p">(</span>
+    <span class="n">file_name</span><span class="p">,</span>
+    <span class="n">text</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Writes an outfile froim a list of strings.
+Mode = r, w, etc str.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">simple_text_writer</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="nb">text</span><span class="p">,</span> <span class="k">mode</span><span class="o">=</span><span class="k">None</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">    Writes an outfile froim a list of strings.</span>
+
+<span class="ss">    Mode = r, w, etc str.</span>
+
+<span class="ss">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="k">mode</span> <span class="o">==</span> <span class="k">None</span><span class="p">:</span>
+
+        <span class="k">mode</span> <span class="o">=</span> <span class="ss">&quot;w&quot;</span>
+
+    <span class="k">with</span> <span class="k">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="k">mode</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+
+        <span class="n">file</span><span class="p">.</span><span class="k">write</span><span class="p">(</span><span class="nb">text</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="string_list_writer">string_list_writer</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">string_list_writer</span><span class="p">(</span>
+    <span class="n">file_name</span><span class="p">,</span>
+    <span class="n">list_holder</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Writes an outfile froim a list of strings.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">string_list_writer</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">list_holder</span><span class="p">,</span> <span class="k">mode</span><span class="o">=</span><span class="k">None</span><span class="p">):</span>
+
+    <span class="ss">&quot;&quot;&quot;Writes an outfile froim a list of strings.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="k">mode</span> <span class="o">==</span> <span class="k">None</span><span class="p">:</span>
+
+        <span class="k">mode</span> <span class="o">=</span> <span class="ss">&quot;w&quot;</span>
+
+    <span class="k">with</span> <span class="k">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="k">mode</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+
+        <span class="k">for</span> <span class="n">line_str</span> <span class="k">in</span> <span class="n">list_holder</span><span class="p">:</span>
+
+            <span class="n">file</span><span class="p">.</span><span class="k">write</span><span class="p">(</span><span class="n">line_str</span> <span class="o">+</span> <span class="ss">&quot;\n&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../" class="btn btn-xs btn-link">
+        Index
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../dynamic_loader/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../dynamic_loader/" class="btn btn-xs btn-link">
+        Dynamic Loader
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+      <p>
+        <a href="https://home-meatware/meatware/helpohelpo.git">helpohelpo</a>
+      </p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="https://home-meatware/meatware/helpohelpo.git">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
