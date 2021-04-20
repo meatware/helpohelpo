@@ -44,7 +44,7 @@ pdocs==1.0.1
 pkg-resources==0.0.0
 pluggy==0.13.1
 portray==1.3.1
-py==1.8.1
+py==1.10.0
 pydash==4.7.6
 Pygments==2.6.1
 pylint==2.4.4
